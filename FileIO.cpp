@@ -34,7 +34,8 @@ int readCategories(std::vector<ItemCategory> &categories)
 	// file could not be opened for some reason 
 	if (!in.is_open())
 	{
-		Utils::message("Error reading file \"categories.txt\".");
+		QString error = "Error reading file \"" + QString::fromStdString(cat_file_name) + "\".";
+		Utils::message(error);
 		return 1;
 	}
 
@@ -74,7 +75,8 @@ int readItems(std::vector<ItemCategory> &categories)
 	// file could not be opened for some reason 
 	if (!in.is_open())
 	{
-		Utils::message("Error reading file \"items.txt\".");
+		QString error = "Error reading file \"" + QString::fromStdString(item_file_name) + "\".";
+		Utils::message(error);
 		return 1;
 	}
 
@@ -122,7 +124,8 @@ int readConversions(std::vector<ItemCategory> const& categories,
 	// file could not be opened for some reason 
 	if (!in.is_open())
 	{
-		Utils::message("Error reading file \"conversions.txt\".");
+		QString error = "Error reading file \"" + QString::fromStdString(conversion_file_name) + "\".";
+		Utils::message(error);
 		return 1;
 	}
 
