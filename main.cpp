@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 #include <QtGui/QApplication>
 
-int __stdcall WinMain(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	QApplication app(argc, argv);
 	setlocale(LC_NUMERIC,"C");
