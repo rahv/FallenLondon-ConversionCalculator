@@ -1,0 +1,13 @@
+#ID	Category Name
+0	Academic
+1	Carthography
+2	Elder
+3	Infernal
+4	Influence
+5	Luminosity
+6	Mysteries
+7	Nostalgia
+8	Rag Trade
+9	Rumour
+10	Wild Words
+11	Wines
