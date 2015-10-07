@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Fallen London - Item Conversion Calculator (by rahv7)</string>
+   <string>Fallen London - Item Conversion Calculator (by rahv7) - v0.9</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">

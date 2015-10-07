@@ -18,7 +18,9 @@
 MainWindow::MainWindow(QWidget* parent)
 : _validator(new QIntValidator(1, 1e+6, this))
 {
-	FileIO::readInputFiles(_categories, _conversions);
+	int const ret (FileIO::readInputFiles(_categories, _conversions));
+	if (ret != 0)
+		exit(ret);
 	setupUi(this);
 	this->itemAmount->setValidator(_validator);
 	populateMenus();

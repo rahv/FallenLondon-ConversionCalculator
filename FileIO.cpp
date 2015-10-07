@@ -34,7 +34,7 @@ int readCategories(std::vector<ItemCategory> &categories)
 	// file could not be opened for some reason 
 	if (!in.is_open())
 	{
-		Utils::message("Error reading categories file.");
+		Utils::message("Error reading file \"categories.txt\".");
 		return 1;
 	}
 
@@ -74,7 +74,7 @@ int readItems(std::vector<ItemCategory> &categories)
 	// file could not be opened for some reason 
 	if (!in.is_open())
 	{
-		Utils::message("Error reading items file.");
+		Utils::message("Error reading file \"items.txt\".");
 		return 1;
 	}
 
@@ -122,7 +122,7 @@ int readConversions(std::vector<ItemCategory> const& categories,
 	// file could not be opened for some reason 
 	if (!in.is_open())
 	{
-		Utils::message("Error reading conversions file.");
+		Utils::message("Error reading file \"conversions.txt\".");
 		return 1;
 	}
 
