@@ -56,6 +56,7 @@ private:
 private slots:
 	void on_catBox_currentIndexChanged(int idx);
 	void on_startButton_pressed();
+	void showInfo() const;
 };
 
 #endif //MAINWINDOW_H

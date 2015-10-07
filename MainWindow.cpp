@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "FileIO.h"
+#include "InfoDialog.h"
 #include "ItemCategory.h"
 #include "Utils.h"
 
@@ -25,6 +26,12 @@ MainWindow::MainWindow(QWidget* parent)
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::showInfo() const
+{
+	InfoDialog dlg;
+	dlg.exec();
 }
 
 void MainWindow::populateMenus()

@@ -7,12 +7,14 @@ project( FallenLondon-ItemConverter )
 # Source files
 SET( SOURCES
 	FileIO.cpp
+	InfoDialog.cpp
 	MainWindow.cpp
 	Utils.cpp
 )
 
 # Moc Header files
 SET( MOC_HEADERS
+	InfoDialog.h
 	MainWindow.h
 )
 
@@ -26,6 +28,7 @@ SET( HEADERS
 
 # UI files
 SET( UIS
+	Info.ui
 	MainWindow.ui
 )
 
