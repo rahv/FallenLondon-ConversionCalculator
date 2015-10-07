@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 
 # Project name
-project( FallenLondon-ItemConverter )
+project( FallenLondon-ConversionCalculator )
 
 # Source files
 SET( SOURCES
@@ -51,7 +51,7 @@ QT4_WRAP_CPP( MOC_SOURCES ${MOC_HEADERS} )
 #SOURCE_GROUP("Moc Files" REGULAR_EXPRESSION "moc_.*")
 
 # Create the library
-ADD_EXECUTABLE(FallenLondon-ItemConverter
+ADD_EXECUTABLE( FallenLondon-ConversionCalculator
 	main.cpp
 	${SOURCES}
 	${HEADERS}
@@ -60,7 +60,7 @@ ADD_EXECUTABLE(FallenLondon-ItemConverter
 	${UIS}
 )
 
-TARGET_LINK_LIBRARIES( FallenLondon-ItemConverter
+TARGET_LINK_LIBRARIES( FallenLondon-ConversionCalculator
 	${QT_LIBRARIES}
 )
 
