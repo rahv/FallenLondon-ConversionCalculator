@@ -160,7 +160,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Select category of the items:</string>
+            <string>Select item category:</string>
            </property>
           </widget>
          </item>
@@ -325,8 +325,8 @@
  </widget>
  <tabstops>
   <tabstop>catBox</tabstop>
-  <tabstop>itemAmount</tabstop>
   <tabstop>itemBox</tabstop>
+  <tabstop>itemAmount</tabstop>
   <tabstop>itemsButton</tabstop>
   <tabstop>actionsButton</tabstop>
   <tabstop>startButton</tabstop>
