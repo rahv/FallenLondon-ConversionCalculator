@@ -15,6 +15,7 @@ struct ConversionState
 	std::size_t input;			// Number of required input items for
 	std::size_t output;			// this amount of output items
 	std::size_t actions;		// Number of actions required for the complete chain up to the originally requested item(s)
+	std::size_t target_output;
 };
 
 /**

@@ -85,7 +85,7 @@ void MainWindow::getDirectConversions(std::vector<ConversionState> &conv_states,
 		// add item if it's convertable into target type and *not* in the list already (to avoid conversion circles)
 		if ( _conversions[i].getOutputIdx() == conv_states[state_idx].input_idx && 
 		     std::none_of(conv_states.cbegin(), conv_states.cend(), [&input_idx](ConversionState s){ return s.input_idx == input_idx; }))
-			conv_states.push_back( {input_idx, state_idx, 0, conv_states[state_idx].input, conv_states[state_idx].actions} );
+			conv_states.push_back( {input_idx, state_idx, 0, conv_states[state_idx].input, conv_states[state_idx].actions, conv_states[state_idx].target_output } );
 	}
 }
 
@@ -114,7 +114,8 @@ void MainWindow::getItemsNeeded(std::vector<ConversionState> &conv_states, std::
 
 	// calculate number of items needed
 	// slightly different methods are applied for minimising the number of input items or input actions
-	std::size_t rest_amount = conv_states[state_idx].output;
+	std::size_t rest_amount (conv_states[state_idx].output);
+	std::size_t output_amount (0);
 	for (std::size_t i=conv.size()-1; i>0; --i)
 	{
 		std::size_t const ratio (static_cast<std::size_t>(std::floor( conv[i].getOutputAmount()/ static_cast<double>(conv[i-1].getOutputAmount()))));
@@ -126,37 +127,44 @@ void MainWindow::getItemsNeeded(std::vector<ConversionState> &conv_states, std::
 			batch++;
 		conv_states[state_idx].input   += (conv[i].getInputAmount() * batch);
 		conv_states[state_idx].actions += batch;
-		rest_amount = (rest_amount > (conv[i].getOutputAmount() * batch)) ? rest_amount-(conv[i].getOutputAmount() * batch) : 0;
+		output_amount += (conv[i].getOutputAmount() * batch);
+		rest_amount = (rest_amount > (conv[i].getOutputAmount() * batch)) ? (rest_amount - output_amount) : 0;
 	}
 	std::size_t const n_actions (static_cast<std::size_t>(std::ceil(rest_amount / static_cast<double>(conv[0].getOutputAmount()))));
 	conv_states[state_idx].input   += (n_actions * conv[0].getInputAmount());
 	conv_states[state_idx].actions += n_actions;
+	if (conv_states[state_idx].target_output == 0)
+		conv_states[state_idx].target_output = (output_amount + n_actions * conv[0].getOutputAmount());
 }
 
 void MainWindow::displayResults(std::vector<ConversionState> const& conv_states)
 {
 	int const n_states (static_cast<int>(conv_states.size()));
-	QStandardItemModel* model (new QStandardItemModel(n_states-1, 4, this));
+	QStandardItemModel* model (new QStandardItemModel(n_states-1, 5, this));
 	model->setHorizontalHeaderItem(0, new QStandardItem("# Items"));
 	model->setHorizontalHeaderItem(1, new QStandardItem("Item type"));
-	model->setHorizontalHeaderItem(2, new QStandardItem("# Actions"));
-	model->setHorizontalHeaderItem(3, new QStandardItem("Intermediate items"));
+	model->setHorizontalHeaderItem(2, new QStandardItem("# Target items"));
+	model->setHorizontalHeaderItem(3, new QStandardItem("# Actions"));
+	model->setHorizontalHeaderItem(4, new QStandardItem("Intermediate items"));
 	this->tableView->setModel(model);
 	this->tableView->setColumnWidth(0, 70);
 	this->tableView->setColumnWidth(1, 270);
 	this->tableView->setColumnWidth(2, 100);
-	this->tableView->setColumnWidth(3, 600);
+	this->tableView->setColumnWidth(3, 100);
+	this->tableView->setColumnWidth(4, 600);
 
 	for (int i=1; i<n_states; ++i)
 	{
 		QStandardItem *const n_input_items (new  QStandardItem(QString::number(conv_states[i].input) + " x"));
 		QStandardItem *const item_name (new  QStandardItem(_categories[conv_states[i].input_idx.first].item(conv_states[i].input_idx.second)));
+		QStandardItem *const n_targets (new  QStandardItem(QString::number(conv_states[i].target_output) + " x"));
 		QStandardItem *const n_actions (new  QStandardItem("(" + QString::number(conv_states[i].actions) + " actions)"));
 		QStandardItem *const intermediates(new  QStandardItem(getIntermediateItemsString(conv_states, i)));
 		model->setItem(i-1, 0, n_input_items);
 		model->setItem(i-1, 1, item_name);
-		model->setItem(i-1, 2, n_actions);
-		model->setItem(i-1, 3, intermediates);
+		model->setItem(i-1, 2, n_targets);
+		model->setItem(i-1, 3, n_actions);
+		model->setItem(i-1, 4, intermediates);
 	}
 }
 
@@ -191,7 +199,7 @@ void MainWindow::on_startButton_pressed()
 
 	// start building the directed graph and calculate item numbers for each conversion step
 	std::vector<ConversionState> conv_states;
-	conv_states.push_back( { getCurrentSelection(), 0, this->itemAmount->text().toInt(), this->itemAmount->text().toInt(), 0 } );
+	conv_states.push_back( { getCurrentSelection(), 0, this->itemAmount->text().toInt(), this->itemAmount->text().toInt(), 0, 0 } );
 	getDirectConversions(conv_states, 0);
 	for (std::size_t i=1; i<conv_states.size(); ++i)
 	{
