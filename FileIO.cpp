@@ -91,7 +91,7 @@ int readItems(std::vector<ItemCategory> &categories)
 		line_content = Utils::splitString(line, '\t');
 		auto it = line_content.cbegin();
 		// more than three columns found in current line
-		if (line_content.size() != 3)
+		if (line_content.size() != 4)
 		{
 			Utils::message("File format error in items file.");
 			return 2;
@@ -110,7 +110,8 @@ int readItems(std::vector<ItemCategory> &categories)
 			return 4;
 		}
 
-		categories[cat_idx].add(QString::fromStdString(*it));
+		categories[cat_idx].addName(QString::fromStdString(*it++));
+		categories[cat_idx].addValue(QString::fromStdString(*it++).toFloat());
 	}
 	
 	return 0;
