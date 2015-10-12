@@ -143,27 +143,27 @@ void MainWindow::displayResults(std::vector<ConversionState> const& conv_states)
 	QStandardItemModel* model (new QStandardItemModel(n_states-1, 5, this));
 	model->setHorizontalHeaderItem(0, new QStandardItem("# Items"));
 	model->setHorizontalHeaderItem(1, new QStandardItem("Item type"));
-	model->setHorizontalHeaderItem(2, new QStandardItem("# Target items"));
-	model->setHorizontalHeaderItem(3, new QStandardItem("# Actions"));
+	model->setHorizontalHeaderItem(2, new QStandardItem("# Actions"));
+	model->setHorizontalHeaderItem(3, new QStandardItem("# Output"));
 	model->setHorizontalHeaderItem(4, new QStandardItem("Intermediate items"));
 	this->tableView->setModel(model);
 	this->tableView->setColumnWidth(0, 70);
-	this->tableView->setColumnWidth(1, 270);
+	this->tableView->setColumnWidth(1, 260);
 	this->tableView->setColumnWidth(2, 100);
-	this->tableView->setColumnWidth(3, 100);
+	this->tableView->setColumnWidth(3, 70);
 	this->tableView->setColumnWidth(4, 600);
 
 	for (int i=1; i<n_states; ++i)
 	{
 		QStandardItem *const n_input_items (new  QStandardItem(QString::number(conv_states[i].input) + " x"));
 		QStandardItem *const item_name (new  QStandardItem(_categories[conv_states[i].input_idx.first].item(conv_states[i].input_idx.second)));
-		QStandardItem *const n_targets (new  QStandardItem(QString::number(conv_states[i].target_output) + " x"));
 		QStandardItem *const n_actions (new  QStandardItem("(" + QString::number(conv_states[i].actions) + " actions)"));
+		QStandardItem *const n_targets (new  QStandardItem(QString::number(conv_states[i].target_output) + " x"));
 		QStandardItem *const intermediates(new  QStandardItem(getIntermediateItemsString(conv_states, i)));
 		model->setItem(i-1, 0, n_input_items);
 		model->setItem(i-1, 1, item_name);
-		model->setItem(i-1, 2, n_targets);
-		model->setItem(i-1, 3, n_actions);
+		model->setItem(i-1, 2, n_actions);
+		model->setItem(i-1, 3, n_targets);
 		model->setItem(i-1, 4, intermediates);
 	}
 }
