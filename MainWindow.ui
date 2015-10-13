@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>730</width>
-    <height>460</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>730</width>
-    <height>460</height>
+    <height>500</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -283,6 +283,18 @@
             <font>
              <pointsize>10</pointsize>
             </font>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0" colspan="4">
+          <widget class="QCheckBox" name="ppaCheckBox">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Show Pennies per Action (PPA) for conversions</string>
            </property>
           </widget>
          </item>

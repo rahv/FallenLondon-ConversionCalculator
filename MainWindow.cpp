@@ -140,33 +140,53 @@ void MainWindow::getItemsNeeded(std::vector<ConversionState> &conv_states, std::
 
 void MainWindow::displayResults(std::vector<ConversionState> const& conv_states)
 {
+	bool const showPPA (this->ppaCheckBox->isChecked());
+	int const n_columns = (showPPA) ? 6 : 4;
 	int const n_states (static_cast<int>(conv_states.size()));
-	QStandardItemModel* model (new QStandardItemModel(n_states-1, 5, this));
+	QStandardItemModel* model (new QStandardItemModel(n_states-1, n_columns, this));
 	model->setHorizontalHeaderItem(0, new QStandardItem("# Items"));
 	model->setHorizontalHeaderItem(1, new QStandardItem("Item type"));
 	model->setHorizontalHeaderItem(2, new QStandardItem("# Actions"));
-	model->setHorizontalHeaderItem(3, new QStandardItem("# Output"));
-	model->setHorizontalHeaderItem(4, new QStandardItem("Intermediate items"));
+	model->setHorizontalHeaderItem(n_columns-1, new QStandardItem("Intermediate items"));
 	this->tableView->setModel(model);
 	this->tableView->setColumnWidth(0, 70);
 	this->tableView->setColumnWidth(1, 260);
 	this->tableView->setColumnWidth(2, 100);
-	this->tableView->setColumnWidth(3, 70);
-	this->tableView->setColumnWidth(4, 600);
+	this->tableView->setColumnWidth(n_columns-1, 600);
+	if (showPPA)
+	{
+		model->setHorizontalHeaderItem(3, new QStandardItem("# Output"));
+		model->setHorizontalHeaderItem(4, new QStandardItem("PPA"));
+		this->tableView->setColumnWidth(3, 70);
+		this->tableView->setColumnWidth(4, 70);
+	}
 
 	for (int i=1; i<n_states; ++i)
 	{
 		QStandardItem *const n_input_items (new  QStandardItem(QString::number(conv_states[i].input) + " x"));
 		QStandardItem *const item_name (new  QStandardItem(_categories[conv_states[i].input_idx.first].item(conv_states[i].input_idx.second)));
 		QStandardItem *const n_actions (new  QStandardItem("(" + QString::number(conv_states[i].actions) + " actions)"));
-		QStandardItem *const n_targets (new  QStandardItem(QString::number(conv_states[i].target_output) + " x"));
 		QStandardItem *const intermediates(new  QStandardItem(getIntermediateItemsString(conv_states, i)));
 		model->setItem(i-1, 0, n_input_items);
 		model->setItem(i-1, 1, item_name);
 		model->setItem(i-1, 2, n_actions);
-		model->setItem(i-1, 3, n_targets);
-		model->setItem(i-1, 4, intermediates);
+		model->setItem(i-1, n_columns-1, intermediates);
+		if (showPPA)
+		{
+			QStandardItem *const n_targets (new  QStandardItem(QString::number(conv_states[i].target_output) + " x"));
+			QStandardItem *const ppa (new  QStandardItem(QString::number(calcPPA(conv_states[i]), 'f', 2)));
+			model->setItem(i-1, 3, n_targets);
+			model->setItem(i-1, 4, ppa);
+		}
 	}
+}
+
+float MainWindow::calcPPA(ConversionState const& c) const
+{
+	ItemIndex const target (getCurrentSelection());
+	float const gain = c.target_output * _categories[target.first].value(target.second)
+	                 - c.input * _categories[c.input_idx.first].value(c.input_idx.second);
+	return gain/static_cast<float>(c.actions);
 }
 
 QString const MainWindow::getIntermediateItemsString(std::vector<ConversionState> const& conv_states, std::size_t target_idx) const
