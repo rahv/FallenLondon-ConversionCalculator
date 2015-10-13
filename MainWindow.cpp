@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget* parent)
 		exit(ret);
 	setupUi(this);
 	this->itemAmount->setValidator(_validator);
+	connect(itemAmount, SIGNAL(returnPressed()), this, SLOT(on_startButton_pressed()));
 	populateMenus();
 }
 
