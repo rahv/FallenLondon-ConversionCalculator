@@ -14,3 +14,6 @@ items appearing here are their intellectual property.
 
 For discussions on the game check out the official forums at http://community.failbettergames.com or the Fallen 
 London subreddit at https://www.reddit.com/r/fallenlondon .
+
+Note:  There might be dll-errors when running the Programme in Windows. If there are, the Microsoft Visual Studio 2013 Redistributable (vcredist_x86.exe) needs to be installed. It can be downloaded here:
+http://www.microsoft.com/en-us/download/details.aspx?id=40784
