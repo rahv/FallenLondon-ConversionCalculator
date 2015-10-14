@@ -22,6 +22,8 @@ struct ConversionState
 	std::size_t actions;
 	/// Actual number of resulting (final) output items
 	std::size_t target_output;
+	/// Value of items during conversion chain
+	float value;
 };
 
 /**

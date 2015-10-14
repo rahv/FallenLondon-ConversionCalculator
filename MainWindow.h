@@ -36,7 +36,10 @@ private:
 	/** Returns all conversions that convert from a to b */
 	std::vector<Conversion> const getPossibleConversions(std::vector<ConversionState> const& conv_states, std::size_t state_idx) const;
 
-	/** Updates the number of required items and actions to yield the number of currently handled items */
+	/** 
+	 * Updates the number of required items for current step of conversion chain.
+	 * It also counts the necessary actions and the value gained/lost from conversions.
+	 */
 	void getItemsNeeded(std::vector<ConversionState> &conv_states, std::size_t state_idx) const;
 
 	/** Displays the results in a table */

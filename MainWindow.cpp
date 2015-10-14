@@ -86,7 +86,7 @@ void MainWindow::getDirectConversions(std::vector<ConversionState> &conv_states,
 		// add item if it's convertable into target type and *not* in the list already (to avoid conversion circles)
 		if ( _conversions[i].getOutputIdx() == conv_states[state_idx].input_idx && 
 		     std::none_of(conv_states.cbegin(), conv_states.cend(), [&input_idx](ConversionState s){ return s.input_idx == input_idx; }))
-			conv_states.push_back( {input_idx, state_idx, 0, conv_states[state_idx].input, conv_states[state_idx].actions, conv_states[state_idx].target_output } );
+			conv_states.push_back( {input_idx, state_idx, 0, conv_states[state_idx].input, conv_states[state_idx].actions, conv_states[state_idx].target_output, conv_states[state_idx].value } );
 	}
 }
 
@@ -128,14 +128,31 @@ void MainWindow::getItemsNeeded(std::vector<ConversionState> &conv_states, std::
 			batch++;
 		conv_states[state_idx].input   += (conv[i].getInputAmount() * batch);
 		conv_states[state_idx].actions += batch;
-		output_amount += (conv[i].getOutputAmount() * batch);
-		rest_amount = (rest_amount > (conv[i].getOutputAmount() * batch)) ? (rest_amount - output_amount) : 0;
+		std::size_t const n_output_items (conv[i].getOutputAmount() * batch);
+		output_amount += n_output_items;
+		if (rest_amount > n_output_items)
+			rest_amount -= output_amount;
+		else
+		{
+			if (conv_states[state_idx].target_output != 0 && this->ppaCheckBox->isChecked())
+			{
+				// calculate value of converted items that were not needed in next step of conversion chain
+				ItemIndex const idx (conv[i].getOutputIdx());
+				conv_states[state_idx].value += (n_output_items - rest_amount) * _categories[idx.first].value(idx.second);
+			}
+			rest_amount = 0;
+		}
 	}
 	std::size_t const n_actions (static_cast<std::size_t>(std::ceil(rest_amount / static_cast<double>(conv[0].getOutputAmount()))));
 	conv_states[state_idx].input   += (n_actions * conv[0].getInputAmount());
 	conv_states[state_idx].actions += n_actions;
-	if (conv_states[state_idx].target_output == 0)
+	if (conv_states[state_idx].target_output == 0 && this->ppaCheckBox->isChecked())
+	{
+		// calculate value of all output items of target item type (not just the requested number)
+		ItemIndex const idx (conv_states[0].input_idx);
 		conv_states[state_idx].target_output = (output_amount + n_actions * conv[0].getOutputAmount());
+		conv_states[state_idx].value += (conv_states[state_idx].target_output * _categories[idx.first].value(idx.second));
+	}
 }
 
 void MainWindow::displayResults(std::vector<ConversionState> const& conv_states)
@@ -184,8 +201,7 @@ void MainWindow::displayResults(std::vector<ConversionState> const& conv_states)
 float MainWindow::calcPPA(ConversionState const& c) const
 {
 	ItemIndex const target (getCurrentSelection());
-	float const gain = c.target_output * _categories[target.first].value(target.second)
-	                 - c.input * _categories[c.input_idx.first].value(c.input_idx.second);
+	float const gain = c.value - c.input * _categories[c.input_idx.first].value(c.input_idx.second);
 	return gain/static_cast<float>(c.actions);
 }
 
@@ -220,7 +236,7 @@ void MainWindow::on_startButton_pressed()
 
 	// start building the directed graph and calculate item numbers for each conversion step
 	std::vector<ConversionState> conv_states;
-	conv_states.push_back( { getCurrentSelection(), 0, this->itemAmount->text().toInt(), this->itemAmount->text().toInt(), 0, 0 } );
+	conv_states.push_back( { getCurrentSelection(), 0, this->itemAmount->text().toInt(), this->itemAmount->text().toInt(), 0, 0, 0 } );
 	getDirectConversions(conv_states, 0);
 	for (std::size_t i=1; i<conv_states.size(); ++i)
 	{
