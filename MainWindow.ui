@@ -287,14 +287,14 @@
           </widget>
          </item>
          <item row="5" column="0" colspan="4">
-          <widget class="QCheckBox" name="ppaCheckBox">
+          <widget class="QCheckBox" name="epaCheckBox">
            <property name="font">
             <font>
              <pointsize>9</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>Show Pennies per Action (PPA) for conversions</string>
+            <string>Show Echoes per Action (EPA) for conversions</string>
            </property>
           </widget>
          </item>

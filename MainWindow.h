@@ -45,8 +45,8 @@ private:
 	/** Displays the results in a table */
 	void displayResults(std::vector<ConversionState> const& conv_states);
 
-	/** Calculates the pennies per action gained (or lost) for this particular conversion */
-	float calcPPA(ConversionState const& c) const;
+	/** Calculates the Echoes per action gained (or lost) for this particular conversion */
+	float calcEPA(ConversionState const& c) const;
 
 	/** Puts together a string of all intermediate items used in the conversion chain for text output of the results */
 	QString const getIntermediateItemsString(std::vector<ConversionState> const& conv_states, std::size_t target_idx) const;

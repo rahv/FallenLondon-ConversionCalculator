@@ -134,7 +134,7 @@ void MainWindow::getItemsNeeded(std::vector<ConversionState> &conv_states, std::
 			rest_amount -= output_amount;
 		else
 		{
-			if (conv_states[state_idx].target_output != 0 && this->ppaCheckBox->isChecked())
+			if (conv_states[state_idx].target_output != 0 && this->epaCheckBox->isChecked())
 			{
 				// calculate value of converted items that were not needed in next step of conversion chain
 				ItemIndex const idx (conv[i].getOutputIdx());
@@ -146,7 +146,7 @@ void MainWindow::getItemsNeeded(std::vector<ConversionState> &conv_states, std::
 	std::size_t const n_actions (static_cast<std::size_t>(std::ceil(rest_amount / static_cast<double>(conv[0].getOutputAmount()))));
 	conv_states[state_idx].input   += (n_actions * conv[0].getInputAmount());
 	conv_states[state_idx].actions += n_actions;
-	if (conv_states[state_idx].target_output == 0 && this->ppaCheckBox->isChecked())
+	if (conv_states[state_idx].target_output == 0 && this->epaCheckBox->isChecked())
 	{
 		// calculate value of all output items of target item type (not just the requested number)
 		ItemIndex const idx (conv_states[0].input_idx);
@@ -157,8 +157,8 @@ void MainWindow::getItemsNeeded(std::vector<ConversionState> &conv_states, std::
 
 void MainWindow::displayResults(std::vector<ConversionState> const& conv_states)
 {
-	bool const showPPA (this->ppaCheckBox->isChecked());
-	int const n_columns = (showPPA) ? 6 : 4;
+	bool const showEPA (this->epaCheckBox->isChecked());
+	int const n_columns = (showEPA) ? 6 : 4;
 	int const n_states (static_cast<int>(conv_states.size()));
 	QStandardItemModel* model (new QStandardItemModel(n_states-1, n_columns, this));
 	model->setHorizontalHeaderItem(0, new QStandardItem("# Items"));
@@ -170,10 +170,10 @@ void MainWindow::displayResults(std::vector<ConversionState> const& conv_states)
 	this->tableView->setColumnWidth(1, 260);
 	this->tableView->setColumnWidth(2, 100);
 	this->tableView->setColumnWidth(n_columns-1, 600);
-	if (showPPA)
+	if (showEPA)
 	{
 		model->setHorizontalHeaderItem(3, new QStandardItem("# Output"));
-		model->setHorizontalHeaderItem(4, new QStandardItem("PPA"));
+		model->setHorizontalHeaderItem(4, new QStandardItem("EPA"));
 		this->tableView->setColumnWidth(3, 70);
 		this->tableView->setColumnWidth(4, 70);
 	}
@@ -188,17 +188,17 @@ void MainWindow::displayResults(std::vector<ConversionState> const& conv_states)
 		model->setItem(i-1, 1, item_name);
 		model->setItem(i-1, 2, n_actions);
 		model->setItem(i-1, n_columns-1, intermediates);
-		if (showPPA)
+		if (showEPA)
 		{
 			QStandardItem *const n_targets (new  QStandardItem(QString::number(conv_states[i].target_output) + " x"));
-			QStandardItem *const ppa (new  QStandardItem(QString::number(calcPPA(conv_states[i]), 'f', 2)));
+			QStandardItem *const epa (new  QStandardItem(QString::number(calcEPA(conv_states[i]), 'f', 2)));
 			model->setItem(i-1, 3, n_targets);
-			model->setItem(i-1, 4, ppa);
+			model->setItem(i-1, 4, epa);
 		}
 	}
 }
 
-float MainWindow::calcPPA(ConversionState const& c) const
+float MainWindow::calcEPA(ConversionState const& c) const
 {
 	ItemIndex const target (getCurrentSelection());
 	float const gain = c.value - c.input * _categories[c.input_idx.first].value(c.input_idx.second);
