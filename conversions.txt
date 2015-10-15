@@ -1,4 +1,4 @@
-#Input-Category	Input-Item-ID	Input-Amount	Output-Category	Output-Item-ID	Output-Amount
+#Input-Category	Input-Item-ID	Input-Amount	Output-Category	Output-Item-ID	Output-Amount	Action-Cost
 #Category- and Item-IDs should be matching the IDs in the items.txt file
 0	0	100	0	1	10	1
 0	0	1000	0	1	105	1
