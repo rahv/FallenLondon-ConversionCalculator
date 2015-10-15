@@ -134,25 +134,31 @@ void MainWindow::getItemsNeeded(std::vector<ConversionState> &conv_states, std::
 			rest_amount -= output_amount;
 		else
 		{
-			if (conv_states[state_idx].target_output != 0 && this->epaCheckBox->isChecked())
-			{
-				// calculate value of converted items that were not needed in next step of conversion chain
-				ItemIndex const idx (conv[i].getOutputIdx());
-				conv_states[state_idx].value += (n_output_items - rest_amount) * _categories[idx.first].value(idx.second);
-			}
+			if (conv_states[state_idx].target_output != 0)
+				conv_states[state_idx].value += calcUnusedItemValue(conv[i], batch, rest_amount);
 			rest_amount = 0;
 		}
 	}
 	std::size_t const n_actions (static_cast<std::size_t>(std::ceil(rest_amount / static_cast<double>(conv[0].getOutputAmount()))));
 	conv_states[state_idx].input   += (n_actions * conv[0].getInputAmount());
 	conv_states[state_idx].actions += n_actions;
-	if (conv_states[state_idx].target_output == 0 && this->epaCheckBox->isChecked())
+	if (conv_states[state_idx].target_output != 0)
+		conv_states[state_idx].value += calcUnusedItemValue(conv[0], n_actions, rest_amount);
+	else
 	{
 		// calculate value of all output items of target item type (not just the requested number)
 		ItemIndex const idx (conv_states[0].input_idx);
 		conv_states[state_idx].target_output = (output_amount + n_actions * conv[0].getOutputAmount());
 		conv_states[state_idx].value += (conv_states[state_idx].target_output * _categories[idx.first].value(idx.second));
 	}
+}
+
+float MainWindow::calcUnusedItemValue(Conversion const& c, std::size_t n_actions, std::size_t rest_amount) const
+{
+	std::size_t const n_output_items (c.getOutputAmount() * n_actions);
+	// calculate value of converted items that were not needed in next step of conversion chain
+	ItemIndex const idx (c.getOutputIdx());
+	return (n_output_items - rest_amount) * _categories[idx.first].value(idx.second);
 }
 
 void MainWindow::displayResults(std::vector<ConversionState> const& conv_states)

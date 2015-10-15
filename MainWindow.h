@@ -42,6 +42,9 @@ private:
 	 */
 	void getItemsNeeded(std::vector<ConversionState> &conv_states, std::size_t state_idx) const;
 
+	/* Calculates the value of surplus items in a conversion (i.e. the ones not needed in the next step of the chain) */
+	float calcUnusedItemValue(Conversion const& c, std::size_t n_actions, std::size_t rest_amount) const;
+	
 	/** Displays the results in a table */
 	void displayResults(std::vector<ConversionState> const& conv_states);
 
