@@ -34,19 +34,23 @@ class Conversion
 {
 public:
 	Conversion(std::size_t input_cat, std::size_t input_id, std::size_t input_amount,
-	           std::size_t output_cat, std::size_t output_id, std::size_t output_amount)
+	           std::size_t output_cat, std::size_t output_id, std::size_t output_amount,
+	           std::size_t n_actions)
 	: _input_index(std::make_pair(input_cat, input_id)), _input_amount(input_amount),
-	  _output_index(std::make_pair(output_cat, output_id)), _output_amount(output_amount)
+	  _output_index(std::make_pair(output_cat, output_id)), _output_amount(output_amount),
+	  _n_actions(n_actions)
 	{};
 
 	ItemIndex const getInputIdx () const { return _input_index; }
 	ItemIndex const getOutputIdx() const { return _output_index; }
 	std::size_t getInputAmount() const { return _input_amount; }
 	std::size_t getOutputAmount() const { return _output_amount; }
+	std::size_t getActions() const { return _n_actions; }
 
 private:
 	std::size_t _input_amount;
 	std::size_t _output_amount;
+	std::size_t _n_actions;
 	ItemIndex _input_index;
 	ItemIndex _output_index;
 };

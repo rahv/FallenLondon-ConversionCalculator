@@ -141,7 +141,7 @@ int readConversions(std::vector<ItemCategory> const& categories,
 		line_content = Utils::splitString(line, '\t');
 		auto it = line_content.cbegin();
 		// more than six columns found in current line
-		if (line_content.size() != 6)
+		if (line_content.size() != 7)
 		{
 			Utils::message("File format error in conversions file.");
 			return 2;
@@ -183,7 +183,8 @@ int readConversions(std::vector<ItemCategory> const& categories,
 			continue;
 		}
 
-		conversions.push_back(Conversion(i_cat_idx, i_item_idx, i_amount, o_cat_idx, o_item_idx, atoi((it++)->c_str())));
+		std::size_t const o_amount (atoi((it++)->c_str()));
+		conversions.push_back(Conversion(i_cat_idx, i_item_idx, i_amount, o_cat_idx, o_item_idx, o_amount, atoi((it++)->c_str())));
 	}
 	
 	return 0;

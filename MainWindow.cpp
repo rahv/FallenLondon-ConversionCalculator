@@ -127,7 +127,7 @@ void MainWindow::getItemsNeeded(std::vector<ConversionState> &conv_states, std::
 		if (this->actionsButton->isChecked() && conv[i-1].getOutputAmount() < (rest_amount - conv[i].getOutputAmount() * batch))
 			batch++;
 		conv_states[state_idx].input   += (conv[i].getInputAmount() * batch);
-		conv_states[state_idx].actions += batch;
+		conv_states[state_idx].actions += (conv[i].getActions() * batch);
 		std::size_t const n_output_items (conv[i].getOutputAmount() * batch);
 		output_amount += n_output_items;
 		if (rest_amount > n_output_items)
@@ -141,7 +141,7 @@ void MainWindow::getItemsNeeded(std::vector<ConversionState> &conv_states, std::
 	}
 	std::size_t const n_actions (static_cast<std::size_t>(std::ceil(rest_amount / static_cast<double>(conv[0].getOutputAmount()))));
 	conv_states[state_idx].input   += (n_actions * conv[0].getInputAmount());
-	conv_states[state_idx].actions += n_actions;
+	conv_states[state_idx].actions += (n_actions * conv[0].getActions());
 	if (conv_states[state_idx].target_output != 0)
 		conv_states[state_idx].value += calcUnusedItemValue(conv[0], n_actions, rest_amount);
 	else
@@ -206,6 +206,8 @@ void MainWindow::displayResults(std::vector<ConversionState> const& conv_states)
 
 float MainWindow::calcEPA(ConversionState const& c) const
 {
+	if (c.actions == 0)
+		return 0;
 	ItemIndex const target (getCurrentSelection());
 	float const gain = c.value - c.input * _categories[c.input_idx.first].value(c.input_idx.second);
 	return gain/static_cast<float>(c.actions);

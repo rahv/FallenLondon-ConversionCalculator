@@ -44,6 +44,7 @@
 7	2	Vision of the Surface	0.5
 7	3	Touching Love Story	2.5
 7	4	Bazaar Permit	12.5
+7	5	Soothe and Cooper Long-Box	62.5
 8	0	Silk Scrap	0.01
 8	1	Surface-Silk Scrap	0.1
 8	2	Whisper-Satin Scrap	0.5
