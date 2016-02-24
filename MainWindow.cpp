@@ -40,9 +40,16 @@ void MainWindow::showInfo() const
 void MainWindow::populateMenus()
 {
 	QStringList cat_list;
-	std::size_t const n_cats (_categories.size());
-	for (std::size_t i=0; i<n_cats; ++i)
-		cat_list << _categories[i].name();
+	int const n_cats (static_cast<int>(_categories.size()));
+	for (int i=0; i<n_cats; ++i)
+	{
+		for (std::size_t j=0; j<_conversions.size(); ++j)
+			if (_conversions[j].isInCategory(i))
+			{
+				cat_list << _categories[i].name();
+				break;
+			}
+	}
 	this->catBox->addItems(cat_list);
 }
 
@@ -54,7 +61,7 @@ void MainWindow::on_catBox_currentIndexChanged(int idx)
 	std::size_t const n_conv (_conversions.size());
 	for (std::size_t i=0; i<n_conv; ++i)
 	{
-		if (_conversions[i].getOutputIdx().first != idx)
+		if (!_conversions[i].isInCategory(idx))
 			continue;
 
 		ItemIndex current_item (_conversions[i].getOutputIdx());

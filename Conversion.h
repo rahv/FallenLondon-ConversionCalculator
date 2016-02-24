@@ -46,6 +46,7 @@ public:
 	std::size_t getInputAmount() const { return _input_amount; }
 	std::size_t getOutputAmount() const { return _output_amount; }
 	std::size_t getActions() const { return _n_actions; }
+	bool isInCategory(int const& idx) const { return (_output_index.first == idx); };
 
 private:
 	std::size_t _input_amount;
