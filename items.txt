@@ -65,3 +65,5 @@
 11	2	Bottle of Strangling Willow Absinthe	0.5
 11	3	Bottle of Broken Giant 1844	2.5
 11	4	Cellar of Wine	12.5
+12	0	A Sealed Copy of the Crimson Book	1562.5
+13	0	Meticulously Altered Stocking	20.0

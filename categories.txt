@@ -11,3 +11,5 @@
 9	Rumour
 10	Wild Words
 11	Wines
+12	Contraband
+13	Boots
